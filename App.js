@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Text, View } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
+import CameraScreen from './src/components/camera'
 
 class HomeScreen extends React.Component {
   render() {
@@ -13,8 +14,8 @@ class HomeScreen extends React.Component {
           onPress={() => this.props.navigation.navigate('Settings')}
         />
         <Button
-          title="Go to Details"
-          onPress={() => this.props.navigation.navigate('Details')}
+          title="Go to Camera"
+          onPress={() => this.props.navigation.navigate('Camera')}
         />
       </View>
     );
@@ -31,8 +32,8 @@ class SettingsScreen extends React.Component {
           onPress={() => this.props.navigation.navigate('Home')}
         />
         <Button
-          title="Go to Details"
-          onPress={() => this.props.navigation.navigate('Details')}
+          title="Go to Camera"
+          onPress={() => this.props.navigation.navigate('Camera')}
         />
       </View>
     );
@@ -42,9 +43,7 @@ class SettingsScreen extends React.Component {
 class DetailsScreen extends React.Component {
   render() {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Details!</Text>
-      </View>
+      <CameraScreen />
     );
   }
 }
@@ -59,8 +58,8 @@ class HomeScreen2 extends React.Component {
           onPress={() => this.props.navigation.navigate('Settings')}
         />
         <Button
-          title="Go to Details"
-          onPress={() => this.props.navigation.navigate('Details')}
+          title="Go to Camera"
+          onPress={() => this.props.navigation.navigate('Camera')}
         />
       </View>
     );
@@ -69,12 +68,12 @@ class HomeScreen2 extends React.Component {
 
 const HomeStack = createStackNavigator({
   Home: { screen: HomeScreen },
-  Details: { screen: DetailsScreen },
+  Camera: { screen: DetailsScreen },
 });
 
 const SettingsStack = createStackNavigator({
   Settings: { screen: SettingsScreen },
-  Details: { screen: DetailsScreen },
+  Camera: { screen: DetailsScreen },
 });
 
 export default createBottomTabNavigator(
@@ -98,12 +97,13 @@ export default createBottomTabNavigator(
 
         // You can return any component that you like here! We usually use an
         // icon component from react-native-vector-icons
-        return <Ionicons name={iconName} size={25} color={tintColor} />;
+        return <Ionicons name={iconName} size={34} color={tintColor} />;
       },
     }),
     tabBarOptions: {
       activeTintColor: 'black',
       inactiveTintColor: 'gray',
+      showLabel: false
     },
   }
 );

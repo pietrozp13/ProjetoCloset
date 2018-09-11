@@ -71,7 +71,6 @@ export default class CameraScreen extends React.Component {
     pictureSizes: [],
     pictureSizeId: 0,
     showGallery: false,
-    showMoreOptions: false,
   };
 
   async componentWillMount() {
@@ -92,8 +91,6 @@ export default class CameraScreen extends React.Component {
 
   toggleView = () => this.setState({ showGallery: !this.state.showGallery, newPhotos: false });
 
-  toggleMoreOptions = () => this.setState({ showMoreOptions: !this.state.showMoreOptions });
-
   toggleFacing = () => this.setState({ type: this.state.type === 'back' ? 'front' : 'back' });
 
   toggleFlash = () => this.setState({ flash: flashModeOrder[this.state.flash] });
@@ -111,8 +108,6 @@ export default class CameraScreen extends React.Component {
   setFocusDepth = depth => this.setState({ depth });
 
   toggleBarcodeScanning = () => this.setState({ barcodeScanning: !this.state.barcodeScanning });
-
-  toggleFaceDetection = () => this.setState({ faceDetecting: !this.state.faceDetecting });
 
   takePicture = () => {
     if (this.camera) {
@@ -147,9 +142,6 @@ export default class CameraScreen extends React.Component {
     );
   };
 
-  onFacesDetected = ({ faces }) => this.setState({ faces });
-  onFaceDetectionError = state => console.warn('Faces detection error:', state);
-
   collectPictureSizes = async () => {
     if (this.camera) {
       const pictureSizes = await this.camera.getAvailablePictureSizesAsync(this.state.ratio);
@@ -182,70 +174,6 @@ export default class CameraScreen extends React.Component {
     return <GalleryScreen onPress={this.toggleView.bind(this)} />;
   }
 
-  renderFace({ bounds, faceID, rollAngle, yawAngle }) {
-    return (
-      <View
-        key={faceID}
-        transform={[
-          { perspective: 600 },
-          { rotateZ: `${rollAngle.toFixed(0)}deg` },
-          { rotateY: `${yawAngle.toFixed(0)}deg` },
-        ]}
-        style={[
-          styles.face,
-          {
-            ...bounds.size,
-            left: bounds.origin.x,
-            top: bounds.origin.y,
-          },
-        ]}>
-        <Text style={styles.faceText}>ID: {faceID}</Text>
-        <Text style={styles.faceText}>rollAngle: {rollAngle.toFixed(0)}</Text>
-        <Text style={styles.faceText}>yawAngle: {yawAngle.toFixed(0)}</Text>
-      </View>
-    );
-  }
-
-  renderLandmarksOfFace(face) {
-    const renderLandmark = position =>
-      position && (
-        <View
-          style={[
-            styles.landmark,
-            {
-              left: position.x - landmarkSize / 2,
-              top: position.y - landmarkSize / 2,
-            },
-          ]}
-        />
-      );
-    return (
-      <View key={`landmarks-${face.faceID}`}>
-        {renderLandmark(face.leftEyePosition)}
-        {renderLandmark(face.rightEyePosition)}
-        {renderLandmark(face.leftEarPosition)}
-        {renderLandmark(face.rightEarPosition)}
-        {renderLandmark(face.leftCheekPosition)}
-        {renderLandmark(face.rightCheekPosition)}
-        {renderLandmark(face.leftMouthPosition)}
-        {renderLandmark(face.mouthPosition)}
-        {renderLandmark(face.rightMouthPosition)}
-        {renderLandmark(face.noseBasePosition)}
-        {renderLandmark(face.bottomMouthPosition)}
-      </View>
-    );
-  }
-
-  renderFaces = () => 
-    <View style={styles.facesContainer} pointerEvents="none">
-      {this.state.faces.map(this.renderFace)}
-    </View>
-
-  renderLandmarks = () => 
-    <View style={styles.facesContainer} pointerEvents="none">
-      {this.state.faces.map(this.renderLandmarksOfFace)}
-    </View>
-
   renderNoPermissions = () => 
     <View style={styles.noPermissions}>
       <Text style={{ color: 'white' }}>
@@ -271,11 +199,9 @@ export default class CameraScreen extends React.Component {
     </View>
 
   renderBottomBar = () =>
+  (
     <View
       style={styles.bottomBar}>
-      <TouchableOpacity style={styles.bottomButton} onPress={this.toggleMoreOptions}>
-        <Octicons name="kebab-horizontal" size={30} color="white"/>
-      </TouchableOpacity>
       <View style={{ flex: 0.4 }}>
         <TouchableOpacity
           onPress={this.takePicture}
@@ -291,35 +217,7 @@ export default class CameraScreen extends React.Component {
         </View>
       </TouchableOpacity>
     </View>
-
-  renderMoreOptions = () =>
-    (
-      <View style={styles.options}>
-        <View style={styles.detectors}>
-          <TouchableOpacity onPress={this.toggleFaceDetection}>
-            <MaterialIcons name="tag-faces" size={32} color={this.state.faceDetecting ? "white" : "#858585" } />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={this.toggleBarcodeScanning}>
-            <MaterialCommunityIcons name="barcode-scan" size={32} color={this.state.barcodeScanning ? "white" : "#858585" } />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.pictureSizeContainer}>
-          <Text style={styles.pictureQualityLabel}>Picture quality</Text>
-          <View style={styles.pictureSizeChooser}>
-            <TouchableOpacity onPress={this.previousPictureSize} style={{ padding: 6 }}>
-              <Ionicons name="md-arrow-dropleft" size={14} color="white" />
-            </TouchableOpacity>
-            <View style={styles.pictureSizeLabel}>
-              <Text style={{color: 'white'}}>{this.state.pictureSize}</Text>
-            </View>
-            <TouchableOpacity onPress={this.nextPictureSize} style={{ padding: 6 }}>
-              <Ionicons name="md-arrow-dropright" size={14} color="white" />
-            </TouchableOpacity>
-          </View>
-        </View>
-      </View> 
-    );
+  );
 
   renderCamera = () =>
     (
@@ -351,9 +249,6 @@ export default class CameraScreen extends React.Component {
           {this.renderTopBar()}
           {this.renderBottomBar()}
         </Camera>
-        {this.state.faceDetecting && this.renderFaces()}
-        {this.state.faceDetecting && this.renderLandmarks()}
-        {this.state.showMoreOptions && this.renderMoreOptions()}
       </View>
     );
 

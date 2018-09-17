@@ -1,14 +1,13 @@
 import React from 'react';
 import { Image, StyleSheet, View, TouchableOpacity, Text, ScrollView } from 'react-native';
 import { FileSystem, FaceDetector, MediaLibrary, Permissions } from 'expo';
-import { MaterialIcons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import Photo from '../photo';
 
 const PHOTOS_DIR = FileSystem.documentDirectory + 'photos';
 
-export default class Closet extends React.Component {
+export default class GalleryScreen extends React.Component {
   state = {
-    faces: {},
     images: {},
     photos: [],
     selected: [],
@@ -17,37 +16,6 @@ export default class Closet extends React.Component {
   componentDidMount = async () => {
     const photos = await FileSystem.readDirectoryAsync(PHOTOS_DIR);
     this.setState({ photos });
-  };
-
-  toggleSelection = (uri, isSelected) => {
-    let selected = this.state.selected;
-    if (isSelected) {
-      selected.push(uri);
-    } else {
-      selected = selected.filter(item => item !== uri);
-    }
-    this.setState({ selected });
-  };
-
-  saveToGallery = async () => {
-    const photos = this.state.selected;
-
-    if (photos.length > 0) {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-
-      if (status !== 'granted') {
-        throw new Error('Denied CAMERA_ROLL permissions!');
-      }
-
-      const promises = photos.map(photoUri => {
-        return MediaLibrary.createAssetAsync(photoUri);
-      });
-
-      await Promise.all(promises);
-      alert('Successfully saved photos to user\'s gallery!');
-    } else {
-      alert('No photos to save!');
-    }
   };
 
   renderPhoto = fileName => 
@@ -61,12 +29,7 @@ export default class Closet extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.navbar}>
-          <TouchableOpacity style={styles.button} onPress={this.props.onPress}>
-            <MaterialIcons name="arrow-back" size={25} color="white" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={this.saveToGallery}>
-            <Text id="batata" style={styles.whiteText}>Camera</Text>
-          </TouchableOpacity>
+          <Ionicons name={`md-appstore`} size={34} color={tintColor} />;
         </View>
         <ScrollView contentComponentStyle={{ flex: 1 }}>
           <View style={styles.pictures}>
@@ -101,9 +64,6 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   whiteText: {
-    color: '#d0ff00',
-    fontStyle: 'italic',
-    fontSize: 40,
-    marginRight: 50
+    color: 'white',
   }
 });

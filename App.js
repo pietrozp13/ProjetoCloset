@@ -3,21 +3,12 @@ import { Button, Text, View } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import CameraScreen from './src/components/camera'
+import GalleryScreen from './src/components/gallery'
 
 class HomeScreen extends React.Component {
   render() {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Home!</Text>
-        <Button
-          title="Go to Settings"
-          onPress={() => this.props.navigation.navigate('Settings')}
-        />
-        <Button
-          title="Go to Camera"
-          onPress={() => this.props.navigation.navigate('Camera')}
-        />
-      </View>
+      <GalleryScreen navigation={this.props.navigation}/>
     );
   }
 }
@@ -43,7 +34,7 @@ class SettingsScreen extends React.Component {
 class DetailsScreen extends React.Component {
   render() {
     return (
-      <CameraScreen />
+      <CameraScreen navigation={this.props.navigation}/>
     );
   }
 }
@@ -94,9 +85,6 @@ export default createBottomTabNavigator(
         } else if (routeName === 'Home2') {
           iconName = `md-appstore`
       }
-
-        // You can return any component that you like here! We usually use an
-        // icon component from react-native-vector-icons
         return <Ionicons name={iconName} size={34} color={tintColor} />;
       },
     }),

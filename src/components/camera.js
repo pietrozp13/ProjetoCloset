@@ -1,23 +1,8 @@
 import { Constants, Camera, FileSystem, Permissions, BarCodeScanner } from 'expo';
 import React from 'react';
-import {
-  Alert,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Slider,
-  Platform
-} from 'react-native';
+import {Alert, StyleSheet, Text, View, TouchableOpacity, Slider, Platform } from 'react-native';
 import GalleryScreen from './gallery';
-
-import { 
-  Ionicons,
-  MaterialIcons,
-  Foundation,
-  MaterialCommunityIcons,
-  Octicons
-} from '@expo/vector-icons';
+import { Ionicons,MaterialIcons,Foundation } from '@expo/vector-icons';
 
 const landmarkSize = 2;
 
@@ -80,7 +65,6 @@ export default class CameraScreen extends React.Component {
 
   componentDidMount() {
     FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'photos').catch(e => {
-      console.log(e, 'Directory exists');
     });
   }
 
@@ -112,7 +96,6 @@ export default class CameraScreen extends React.Component {
   takePicture = () => {
     if (this.camera) {
       let photo = this.camera.takePictureAsync();
-      console.log(photo.options)
       this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved });
     }
   };
@@ -120,7 +103,6 @@ export default class CameraScreen extends React.Component {
   takePicture = async () => {
     if (this.camera) {
       let photo = await this.camera.takePictureAsync();
-      console.log(photo)
       this.onPictureSaved(photo)
     }
   };
@@ -170,10 +152,6 @@ export default class CameraScreen extends React.Component {
     this.setState({ pictureSize: this.state.pictureSizes[newId], pictureSizeId: newId });
   }
 
-  renderGallery() {
-    return <GalleryScreen onPress={this.toggleView.bind(this)} />;
-  }
-
   renderNoPermissions = () => 
     <View style={styles.noPermissions}>
       <Text style={{ color: 'white' }}>
@@ -202,20 +180,14 @@ export default class CameraScreen extends React.Component {
   (
     <View
       style={styles.bottomBar}>
-      <View style={{ flex: 0.4 }}>
+      <View style={{ flex: 1 }}>
         <TouchableOpacity
           onPress={this.takePicture}
           style={{ alignSelf: 'center' }}
         >
           <Ionicons name="ios-radio-button-on" size={70} color="white" />
         </TouchableOpacity>
-      </View> 
-      <TouchableOpacity style={styles.bottomButton} onPress={this.toggleView}>
-        <View>
-          <Foundation name="thumbnails" size={30} color="white" />
-          {this.state.newPhotos && <View style={styles.newPhotosDot}/>}
-        </View>
-      </TouchableOpacity>
+      </View>
     </View>
   );
 
@@ -253,11 +225,8 @@ export default class CameraScreen extends React.Component {
     );
 
   render() {
-    const cameraScreenContent = this.state.permissionsGranted
-      ? this.renderCamera()
-      : this.renderNoPermissions();
-    const content = this.state.showGallery ? this.renderGallery() : cameraScreenContent;
-    return <View style={styles.container}>{content}</View>;
+    const cameraScreenContent = this.state.permissionsGranted ? this.renderCamera() : this.renderNoPermissions();
+    return <View style={styles.container}>{cameraScreenContent}</View>;
   }
 }
 

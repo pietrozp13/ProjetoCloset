@@ -8,7 +8,7 @@ import GalleryScreen from './src/components/gallery'
 class HomeScreen extends React.Component {
   render() {
     return (
-      <GalleryScreen navigation={this.props.navigation}/>
+      <GalleryScreen navigation={this.props.navigation} />
     );
   }
 }
@@ -34,7 +34,7 @@ class SettingsScreen extends React.Component {
 class DetailsScreen extends React.Component {
   render() {
     return (
-      <CameraScreen navigation={this.props.navigation}/>
+      <CameraScreen navigation={this.props.navigation} />
     );
   }
 }
@@ -84,7 +84,7 @@ export default createBottomTabNavigator(
           iconName = `md-grid`;
         } else if (routeName === 'Home2') {
           iconName = `md-appstore`
-      }
+        }
         return <Ionicons name={iconName} size={34} color={tintColor} />;
       },
     }),

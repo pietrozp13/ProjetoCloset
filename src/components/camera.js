@@ -39,24 +39,27 @@ const wbIcons = {
 };
 
 export default class CameraScreen extends React.Component {
-  state = {
-    flash: 'off',
-    zoom: 0,
-    autoFocus: 'on',
-    type: 'back',
-    whiteBalance: 'auto',
-    ratio: '16:9',
-    ratios: [],
-    barcodeScanning: false,
-    faceDetecting: false,
-    faces: [],
-    newPhotos: false,
-    permissionsGranted: false,
-    pictureSize: undefined,
-    pictureSizes: [],
-    pictureSizeId: 0,
-    showGallery: false,
-  };
+  constructor(props) {
+    super(props)
+      this.state = {
+        flash: 'off',
+        zoom: 0,
+        autoFocus: 'on',
+        type: 'back',
+        whiteBalance: 'auto',
+        ratio: '16:9',
+        ratios: [],
+        barcodeScanning: false,
+        faceDetecting: false,
+        faces: [],
+        newPhotos: false,
+        permissionsGranted: false,
+        pictureSize: undefined,
+        pictureSizes: [],
+        pictureSizeId: 0,
+        showGallery: false,
+      }
+  }
 
   async componentWillMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);

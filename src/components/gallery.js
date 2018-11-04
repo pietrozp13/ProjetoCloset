@@ -13,8 +13,10 @@ export default class GalleryScreen extends React.Component {
   };
 
   componentDidMount = async () => {
-    const photos = await FileSystem.readDirectoryAsync(PHOTOS_DIR);
-    this.setState({ photos });
+    this.setState({ 
+      photos: await FileSystem.readDirectoryAsync(PHOTOS_DIR)
+    });
+    console.log(this.props.photosP)
   };
 
   renderPhoto = fileName => 
@@ -24,9 +26,7 @@ export default class GalleryScreen extends React.Component {
     />;
 
   camera = async () => {
-    console.log(this.state.photos);
     const photos = await FileSystem.readDirectoryAsync(PHOTOS_DIR);
-    console.log(photos);
     this.props.navigation.navigate('Camera')
   }
 

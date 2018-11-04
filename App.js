@@ -1,14 +1,27 @@
 import React from 'react';
-import { Button, Text, View } from 'react-native';
+import { Button, Text, View, StyleSheet } from 'react-native';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import CameraScreen from './src/components/camera'
-import GalleryScreen from './src/components/gallery'
+import FormApp from "./src/components/form.js"
+import { AppRegistry } from 'react-native';
+import { ApolloProvider, Query } from 'react-apollo';
+import ApolloClient from "apollo-boost";
+
+//const url = "http://0.0.0.0:4000/api"
+const url = "https://frightful-spell-70294.herokuapp.com/api"
+
+const client = new ApolloClient({
+  uri: url
+});
+
 
 class HomeScreen extends React.Component {
   render() {
     return (
-      <GalleryScreen navigation={this.props.navigation} />
+      <ApolloProvider client={client}>
+         <FormApp/>
+      </ApolloProvider>
     );
   }
 }
@@ -95,3 +108,22 @@ export default createBottomTabNavigator(
     },
   }
 );
+
+/*
+componentDidMount () {
+    
+    client
+    .query({
+      query: gql`
+        {
+          post(id:1) {
+            title
+            body
+            id
+          }
+        }
+      `
+    })
+    .then(result => this.setState({userG:result.data.post}));
+  }
+*/

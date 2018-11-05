@@ -20,6 +20,7 @@ const POST_MUTATION = gql`
   mutation create_post($title: String, $body: String, $userId: Int!){
     create_post(title: $title, body: $body, user_id: $userId){
       id
+      title
     }
   }
 `
@@ -36,31 +37,38 @@ export default class FormApp extends React.Component {
     this.state = {idPost: undefined};
   }
 
-  handleSubmit = (createPost) => {
+  setQuery(data) {
+    let id = data ? data.create_post : null
+    this.setState({
+      idPost: id
+    })
+  }
+
+  handleSubmit = (createPost, data) => {
     const value = this.form.getValue();
-    this.setState({ idPost: value.userId })
     createPost({ variables: {title: value.title, body: value.body, userId: value.userId }})
   }
 
-  queryPost () {
-    const id = this.state.idPost
-    return (
-      <View>
-        <Query query={POSTS_QUERY} variables={{ id }}>
-          {({ loading, error, data }) => {
-            if (loading) return "Loading...";
-            if (error) return `Error! ${error.message}`;
-            return (
-              <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 30 }}>
-                <Text>title: {data.post.title}</Text>
-                <Text>id: {data.post.id}</Text>
-                <Text>body: {data.post.body}</Text>
-              </View>
-            );
-          }}
-        </Query>
-        </View>
-    )
+  queryPost (id) {
+    if(id){
+      return (
+        <View>
+          <Query query={POSTS_QUERY} variables={{ id }}>
+            {({ loading, error, data }) => {
+              if (loading) return "Loading...";
+              if (error) return `Error! ${error.message}`;
+              return (
+                <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 30 }}>
+                  <Text>title: {data.post.title}</Text>
+                  <Text>id: {data.post.id}</Text>
+                  <Text>body: {data.post.body}</Text>
+                </View>
+              );
+            }}
+          </Query>
+          </View>
+      )
+    } return null 
   }
 
   mutationPost () {
@@ -76,18 +84,17 @@ export default class FormApp extends React.Component {
             title="Sign Up!"
             onPress={()=> this.handleSubmit(createPost)}
           />
+        {this.queryPost(data ? data.create_post.id : null )}
         </View>
       )}
     </Mutation>
     )
-
   }
   
   render() {
     return (
       <View style={styles.container}>
         {this.mutationPost()}
-        {this.queryPost()}
       </View>
     );
   }

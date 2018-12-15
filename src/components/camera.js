@@ -38,6 +38,7 @@ const wbIcons = {
   incandescent: 'wb-incandescent',
 };
 
+
 export default class CameraScreen extends React.Component {
   constructor(props) {
     super(props)
@@ -58,8 +59,10 @@ export default class CameraScreen extends React.Component {
         pictureSizes: [],
         pictureSizeId: 0,
         showGallery: false,
+        photo: undefined
       }
   }
+
 
   async componentWillMount() {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
@@ -96,29 +99,18 @@ export default class CameraScreen extends React.Component {
 
   toggleBarcodeScanning = () => this.setState({ barcodeScanning: !this.state.barcodeScanning });
 
-  takePicture = () => {
-    if (this.camera) {
-      let photo = this.camera.takePictureAsync();
-      this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved });
-    }
-  };
 
   takePicture = async () => {
     if (this.camera) {
-      let photo = await this.camera.takePictureAsync();
-      this.onPictureSaved(photo)
+      let newPhoto = await this.camera.takePictureAsync({base64: true});
+      console.log(newPhoto.base64)
+      this.setState({
+        photo: newPhoto
+      })
     }
   };
 
   handleMountError = ({ message }) => console.error(message);
-
-  onPictureSaved = async photo => {
-    await FileSystem.moveAsync({
-      from: photo.uri,
-      to: `${FileSystem.documentDirectory}photos/${Date.now()}.jpg`,
-    });
-    this.setState({ newPhotos: true });
-  }
 
   onBarCodeScanned = code => {
     this.setState(
@@ -179,10 +171,23 @@ export default class CameraScreen extends React.Component {
       </TouchableOpacity>   
     </View>
 
+  batata () {
+    const navigation = this.props.navigation;
+    let teste = navigation.getParam('teste');
+    navigation.getParam('testeFunc')(teste);
+    navigation.navigate('Home', { img: this.state.photo });
+  }
+
   renderBottomBar = () =>
   (
     <View
       style={styles.bottomBar}>
+      <TouchableOpacity
+        onPress={() => this.batata()}
+        style={{ marginLeft: 10, alignSelf: 'center' }}
+      >
+        <Ionicons name="ios-radio-button-on" size={70} color="white" />
+      </TouchableOpacity>
       <View style={{ flex: 1 }}>
         <TouchableOpacity
           onPress={this.takePicture}
@@ -211,15 +216,6 @@ export default class CameraScreen extends React.Component {
           ratio={this.state.ratio}
           pictureSize={this.state.pictureSize}
           onMountError={this.handleMountError}
-          onFacesDetected={this.state.faceDetecting ? this.onFacesDetected : undefined}
-          onFaceDetectionError={this.onFaceDetectionError}
-          barCodeScannerSettings={{
-            barCodeTypes: [
-              BarCodeScanner.Constants.BarCodeType.qr,
-              BarCodeScanner.Constants.BarCodeType.pdf417,
-            ],
-          }}
-          onBarCodeScanned={this.state.barcodeScanning ? this.onBarCodeScanned : undefined}
           >
           {this.renderTopBar()}
           {this.renderBottomBar()}

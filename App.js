@@ -4,9 +4,11 @@ import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 import CameraScreen from './src/components/camera'
 import FormApp from "./src/components/form.js"
+import AddClothe from "./src/components/screens/addClothe/addClothe"
 import { AppRegistry } from 'react-native';
 import { ApolloProvider, Query } from 'react-apollo';
 import ApolloClient from "apollo-boost";
+import MainScreen from "./src/components/screens/mainScreen/mainScreen"
 
 //const url = "http://0.0.0.0:4000/api"
 const url = "https://frightful-spell-70294.herokuapp.com/api"
@@ -17,14 +19,19 @@ const client = new ApolloClient({
 
 
 class HomeScreen extends React.Component {
+  static navigationOptions = {
+    title: 'Add Clothe',
+  }
   render() {
     return (
       <ApolloProvider client={client}>
-         <FormApp/>
+        <MainScreen navigation={this.props.navigation}/>
       </ApolloProvider>
     );
   }
 }
+
+// <AddClothe navigation={this.props.navigation}/>
 
 class SettingsScreen extends React.Component {
   render() {
@@ -70,10 +77,26 @@ class HomeScreen2 extends React.Component {
   }
 }
 
-const HomeStack = createStackNavigator({
-  Home: { screen: HomeScreen },
-  Camera: { screen: DetailsScreen },
-});
+const HomeStack = createStackNavigator(
+  {
+    Home: HomeScreen,
+    Camera: DetailsScreen,
+  },
+  {
+    initialRouteName: 'Home',
+    /* The header config from HomeScreen is now here */
+    navigationOptions: {
+      headerStyle: {
+        backgroundColor: '#dddddd',
+      },
+      headerTintColor: '#000000',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+        fontSize: 22
+      },
+    },
+  },
+);
 
 const SettingsStack = createStackNavigator({
   Settings: { screen: SettingsScreen },
@@ -107,23 +130,5 @@ export default createBottomTabNavigator(
       showLabel: false
     },
   }
+  
 );
-
-/*
-componentDidMount () {
-    
-    client
-    .query({
-      query: gql`
-        {
-          post(id:1) {
-            title
-            body
-            id
-          }
-        }
-      `
-    })
-    .then(result => this.setState({userG:result.data.post}));
-  }
-*/

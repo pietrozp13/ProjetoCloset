@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Text, View, StyleSheet } from 'react-native';
+import { Button, Text, View, StyleSheet, Image } from 'react-native';
 import t from 'tcomb-form-native'; // 0.6.9
 import gql from "graphql-tag";
 import { Query, Mutation } from 'react-apollo';
@@ -61,7 +61,10 @@ export default class FormApp extends React.Component {
                 <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 30 }}>
                   <Text>title: {data.post.title}</Text>
                   <Text>id: {data.post.id}</Text>
-                  <Text>body: {data.post.body}</Text>
+                  <Image
+                    style={{width: 66, height: 58}}
+                    source={{uri: data.post.body }}
+                  />
                 </View>
               );
             }}
@@ -112,3 +115,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
 });
+
+// img base64
+// 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg=='

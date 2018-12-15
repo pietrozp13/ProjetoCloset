@@ -1,184 +1,72 @@
-import React from 'react';
-import { Button, Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import t from 'tcomb-form-native'; // 0.6.9';
-import { Query, Mutation } from 'react-apollo';
-import { POSTS_QUERY, POST_MUTATION } from '../addClothe/addClotheGraph'
+import React, { Component } from 'react';
+import { Text, Image, View, StyleSheet, ScrollView } from 'react-native';
+import img from "../mainScreen/roupa.jpg"
+const photo = img
 
-const Form = t.form.Form;
+class ScrollViewExample extends Component {
 
-let Categorias = t.enums({
-    T: "Tenis",
-    C: "Camisas"
-});
-
-const ClotheInfo = t.struct({
-    descricao: t.String,
-    categotia: Categorias,
-});
-
-const ClotheCar = t.struct({
-  cor: t.String,
-});
-
-const value = {
-    descricao: 'Camisa Preta',
-    categotia: 'C',
-    cor: 'A',
-};
-
-export default class MainScreen extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-        idPost: undefined,
-        photo: null,
-        teste: "abc"
-    };
-  }
-
-  setQuery(data) {
-    let id = data ? data.create_post : null
-    this.setState({
-      idPost: id
-    })
-  }
-
-  setPhoto (photoURI) {
-    this.setState({
-    photo: photoURI
-    })
-  }
-
-  setTeste () {
-    this.setState({
-        teste: "pao"
-    })
-  }
-
-  handleSubmit = (createPost, data) => {
-    const value = this.form.getValue();
-    createPost({ variables: {title: value.title, body: value.body, userId: value.userId }})
-  }
-  
-
-  mutationPost () {
-  var _ = require('lodash');
-
-  const stylesheet = _.cloneDeep(t.form.Form.stylesheet);
-
-  stylesheet.fieldset = {
-    flexDirection: 'row',
-  };
-  stylesheet.formGroup.normal.flex = 1;
-  stylesheet.formGroup.error.flex = 1;
-
-  stylesheet.formGroup.normal.paddingLeft = 20
-  stylesheet.formGroup.normal.paddingRight = 20
-
-  stylesheet.formGroup.error.paddingLeft = 20
-  stylesheet.formGroup.error.paddingRight = 20
-
-  const options = {
-    stylesheet: stylesheet
-  };
-    return(
-      <Mutation mutation={POST_MUTATION}>
-      {(createPost, { data }, loading, error) => {
-        if (loading) return (<Text>Loading...</Text>);
-        if (error) return (<Text>Error! {error.message}</Text>);
-        return (
-          <View style={styles.form}>
-            <Form 
-              ref={c => this.form = c}
-              type={ClotheInfo}
-              value={value}
-            />
-            <Form 
-              ref={c => this.form = c}
-              type={ClotheCar}
-              value={value}
-              options={options}
-            />
-            <Button
-              title="Neiouysduasd"
-              onPress={()=> this.handleSubmit(createPost)}
-            />
-          </View>
-        )}
-      }
-    </Mutation>
-    )
-  }
-
-  teste () {
-    const value = this.form.getValue()
-    this.setState({value: value})
-    console.log(value)
-    this.props.navigation.navigate('Camera', { txt: this.state.value })
-  }
-  
-  render() {
-    let photo = this.props.navigation.getParam('img', 'null')
-    return (
-      <View style={styles.container}>
-        <View style={styles.containerImg}>
-          <TouchableOpacity style={styles.buttonClick} onPress={() => this.props.navigation.navigate('Camera', { testeFunc: this.setTeste.bind(this), teste: this.state.teste })}>
-            {
-              photo.uri ?
-            <Image
-                style={{width: 280, height: 280 }}
-                source={{uri: photo.uri }}
-            /> :
-            <View style={styles.containerImgAdd}>
-              <Text style={{fontSize: 200, marginTop: -50}}>+</Text>
-              <Text style={{fontSize: 26, marginTop: -30}}>Add clothe</Text>
-            </View>
-            }
-          </TouchableOpacity>
-        </View>
-        <View style={styles.containerForm}>
-          {this.mutationPost()}
-        </View>
-      </View>
-    );
-  }
+   state = {
+      names: [
+         {'name': 'Ben', 'id': 1},
+         {'name': 'Susan', 'id': 2},
+         {'name': 'Robert', 'id': 3},
+         {'name': 'Mary', 'id': 4},
+         {'name': 'Daniel', 'id': 5},
+         {'name': 'Laura', 'id': 6},
+         {'name': 'John', 'id': 7},
+         {'name': 'Debra', 'id': 8},
+         {'name': 'Aron', 'id': 9},
+         {'name': 'Ann', 'id': 10},
+         {'name': 'Steve', 'id': 11},
+         {'name': 'Olivia', 'id': 12},
+         {'name': 'Aron', 'id': 13},
+         {'name': 'Ann', 'id': 14},
+         {'name': 'Steve', 'id': 15},
+         {'name': 'Olivia', 'id': 16}
+      ]
+   }
+   render() {
+      return (
+         <View>
+            <Text style = {styles.categoryText}>Camisetas</Text>
+            <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} >
+               {
+                  this.state.names.map((item, index) => (
+                     <View key = {item.id} style = {styles.item}>
+                        <Image
+                            style={{width: 130, height: 130 }}
+                            source={photo}
+                        />
+                        <Text style = {styles.text}>{item.name}</Text>
+                     </View>
+                  ))
+               }
+            </ScrollView>
+         </View>
+      )
+   }
 }
+export default ScrollViewExample
 
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    marginTop: 0,
-    padding: 20,
-    backgroundColor: '#ffffff',
+const styles = StyleSheet.create ({
+  categoryText: {
+    fontSize: 24
   },
-  containerImg: {
-    justifyContent: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-    backgroundColor: '#ffffff',
-    alignItems: 'center'
-  },
-  containerForm: {
-    justifyContent: 'center',
-    marginTop: 0,
-    paddingLeft: 20,
-    paddingRight: 20,
-    backgroundColor: '#ffffff',
-  },
-  containerImgAdd: {
-    borderColor: '#dddddd',
-    borderWidth: 5,
-    height: 280,
-    width: 280,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  buttonClick: {
-    backgroundColor: 'white'
+   item: {
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: 0,
+      margin: 5,
+      borderColor: '#2a4944',
+      borderWidth: 1,
+      backgroundColor: '#d2f7f1',
+      height: 130
+   },
+   text: {
+    position: "relative",
+    alignItems: 'center',
+    top: "-20%",
+    color: '#fff',
   }
-});
-
-/*
-title="Camera 📷 👗"
- onPress={() => this.props.navigation.navigate('Camera', { testeFunc: this.setTeste.bind(this), teste: this.state.teste })}
-*/
+})

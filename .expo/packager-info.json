@@ -1,8 +1,8 @@
 {
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 20805,
+  "expoServerNgrokUrl": "https://qj-rck.pietrozp13.projetocloset.exp.direct",
+  "packagerNgrokUrl": "https://packager.qj-rck.pietrozp13.projetocloset.exp.direct",
+  "ngrokPid": 20834
 }

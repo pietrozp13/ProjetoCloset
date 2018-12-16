@@ -79,7 +79,7 @@ const HomeStack = createStackNavigator(
     /* The header config from HomeScreen is now here */
     navigationOptions: {
       headerStyle: {
-        backgroundColor: '#dddddd',
+        backgroundColor: '#fff',
       },
       headerTintColor: '#000000',
       headerTitleStyle: {

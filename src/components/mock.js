@@ -34,7 +34,7 @@ import img2 from "./photos/roupa2.jpg"
 export const mockCategorias = [
         {
             "categotia": "Camisetas",
-            "id": 1,
+            "id": 0,
             "roupas":[
                 {
                     'name': 'Ben',
@@ -75,7 +75,7 @@ export const mockCategorias = [
         },
         {
             "categotia": "Tenis",
-            "id": 2,
+            "id": 1,
             "roupas":[
                 {
                     'name': 'Ben',

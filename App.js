@@ -10,8 +10,9 @@ import { ApolloProvider, Query } from 'react-apollo';
 import ApolloClient from "apollo-boost";
 import MainScreen from "./src/components/screens/mainScreen/mainScreen"
 
-//const url = "http://0.0.0.0:4000/api"
-const url = "https://frightful-spell-70294.herokuapp.com/api"
+// const url = "http://0.0.0.0:4000/api"
+// const url = "https://frightful-spell-70294.herokuapp.com/api"
+const url = "https://api-useast.graphcms.com/v1/cjpn3ynkz0dh601dd8zz5fxmn/master"
 
 const client = new ApolloClient({
   uri: url
@@ -72,7 +73,6 @@ class HomeScreen2 extends React.Component {
 const HomeStack = createStackNavigator(
   {
     Home: HomeScreen,
-    Camera: DetailsScreen,
   },
   {
     initialRouteName: 'Home',
@@ -92,8 +92,23 @@ const HomeStack = createStackNavigator(
 
 const SettingsStack = createStackNavigator({
   Settings: { screen: SettingsScreen },
-  Camera: { screen: DetailsScreen },
+  Camera: { 
+    screen: DetailsScreen,
+    navigationOptions: {
+      header: null,
+    },
+  },
 });
+
+SettingsStack.navigationOptions = ({ navigation }) => {
+  let tabBarVisible = true;
+  if (navigation.state.index > 0) {
+    tabBarVisible = false;
+  }
+  return {
+    tabBarVisible,
+  };
+};
 
 export default createBottomTabNavigator(
   {

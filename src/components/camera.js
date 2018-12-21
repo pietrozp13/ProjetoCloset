@@ -103,7 +103,6 @@ export default class CameraScreen extends React.Component {
   takePicture = async () => {
     if (this.camera) {
       let newPhoto = await this.camera.takePictureAsync({base64: true});
-      console.log(newPhoto.base64)
       this.setState({
         photo: newPhoto
       })
@@ -117,20 +116,6 @@ export default class CameraScreen extends React.Component {
       { barcodeScanning: !this.state.barcodeScanning },
       Alert.alert(`Barcode found: ${code.data}`)
     );
-  };
-
-  collectPictureSizes = async () => {
-    if (this.camera) {
-      const pictureSizes = await this.camera.getAvailablePictureSizesAsync(this.state.ratio);
-      let pictureSizeId = 0;
-      if (Platform.OS === 'ios') {
-        pictureSizeId = pictureSizes.indexOf('High');
-      } else {
-        // returned array is sorted in ascending order - default size is the largest one
-        pictureSizeId = pictureSizes.length-1;
-      }
-      this.setState({ pictureSizes, pictureSizeId, pictureSize: pictureSizes[pictureSizeId] });
-    }
   };
 
   previousPictureSize = () => this.changePictureSize(1);
@@ -175,7 +160,7 @@ export default class CameraScreen extends React.Component {
     const navigation = this.props.navigation;
     let teste = navigation.getParam('teste');
     navigation.getParam('testeFunc')(teste);
-    navigation.navigate('Home', { img: this.state.photo });
+    navigation.navigate('Settings', { img: this.state.photo });
   }
 
   renderBottomBar = () =>
@@ -207,7 +192,6 @@ export default class CameraScreen extends React.Component {
             this.camera = ref;
           }}
           style={styles.camera}
-          onCameraReady={this.collectPictureSizes}
           type={this.state.type}
           flashMode={this.state.flash}
           autoFocus={this.state.autoFocus}

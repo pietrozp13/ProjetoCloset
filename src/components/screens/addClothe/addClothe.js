@@ -1,29 +1,26 @@
 import React from 'react';
 import { Button, Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import t from 'tcomb-form-native'; // 0.6.9';
+import t from 'tcomb-form-native';
 import { Query, Mutation } from 'react-apollo';
-import { POSTS_QUERY, POST_MUTATION } from '../addClothe/addClotheGraph'
+import { POSTS_QUERY, POST_MUTATION2 } from '../addClothe/addClotheGraph'
 
 const Form = t.form.Form;
 
 let Categorias = t.enums({
-    T: "Tenis",
-    C: "Camisas"
+    Tenis: "Tenis",
+    Camisa: "Camisas"
 });
 
 const ClotheInfo = t.struct({
     descricao: t.String,
     categotia: Categorias,
+    cor: t.String
 });
 
-const ClotheCar = t.struct({
-  cor: t.String,
-});
-
-const value = {
-    descricao: 'Camisa Preta',
-    categotia: 'C',
-    cor: 'A',
+const valueForm = {
+    descricao: '',
+    categotia: 'Camisa',
+    cor: '',
 };
 
 export default class AddClothe extends React.Component {
@@ -55,13 +52,14 @@ export default class AddClothe extends React.Component {
     })
   }
 
-  handleSubmit = (createPost, data) => {
-    const value = this.form.getValue();
-    createPost({ variables: {title: value.title, body: value.body, userId: value.userId }})
+  handleSubmit = (createNroupa, photo) => {
+    let value = this.form.getValue();
+    let photoBase = photo.base64
+    createNroupa({ variables: {descricao: value.descricao, categoria: value.categotia, cor: value.cor, base64: photoBase}})
   }
   
 
-  mutationPost () {
+  mutationPost (photo) {
   var _ = require('lodash');
 
   const stylesheet = _.cloneDeep(t.form.Form.stylesheet);
@@ -82,8 +80,8 @@ export default class AddClothe extends React.Component {
     stylesheet: stylesheet
   };
     return(
-      <Mutation mutation={POST_MUTATION}>
-      {(createPost, { data }, loading, error) => {
+      <Mutation mutation={POST_MUTATION2}>
+      {(createNroupa, { data }, loading, error) => {
         if (loading) return (<Text>Loading...</Text>);
         if (error) return (<Text>Error! {error.message}</Text>);
         return (
@@ -91,17 +89,11 @@ export default class AddClothe extends React.Component {
             <Form 
               ref={c => this.form = c}
               type={ClotheInfo}
-              value={value}
-            />
-            <Form 
-              ref={c => this.form = c}
-              type={ClotheCar}
-              value={value}
-              options={options}
+              value={valueForm}
             />
             <Button
               title="New Clothe 🎉"
-              onPress={()=> this.handleSubmit(createPost)}
+              onPress={()=> this.handleSubmit(createNroupa, photo)}
             />
           </View>
         )}
@@ -113,7 +105,6 @@ export default class AddClothe extends React.Component {
   teste () {
     const value = this.form.getValue()
     this.setState({value: value})
-    console.log(value)
     this.props.navigation.navigate('Camera', { txt: this.state.value })
   }
   
@@ -137,7 +128,7 @@ export default class AddClothe extends React.Component {
           </TouchableOpacity>
         </View>
         <View style={styles.containerForm}>
-          {this.mutationPost()}
+          {this.mutationPost(photo)}
         </View>
       </View>
     );

@@ -19,6 +19,25 @@ export const POST_MUTATION = gql`
   }
 `
 
+export const POST_MUTATION2 = gql`
+  mutation createNroupa($descricao: String, $categoria: String, $cor: String, $base64: String){ 
+    createNroupa(
+      data: {
+        descricao: $descricao,
+        categoria: $categoria,
+        cor: $cor,
+        base64: $base64
+    }
+    ){
+      id
+      descricao
+      cor
+      categoria
+    }
+  }
+`
+
+
 /*
 
 queryPost (id) {

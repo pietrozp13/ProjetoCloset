@@ -6,7 +6,7 @@ import { mockCategorias } from "../../mock"
 class ScrollViewExample extends Component {
 
    state = {
-    categorias: mockCategorias 
+    categorias: mockCategorias
    }
    render() {
       return (
@@ -14,8 +14,8 @@ class ScrollViewExample extends Component {
           {
             this.state.categorias.map((categoria, index) => (
               <View key={index}>
-                <Text key={index} style={styles.categoryText}>{categoria.categotia}</Text>
-                <ScrollViewClothes clothes={categoria.roupas} key={index}/>
+                <Text style={styles.categoryText}>{categoria.categotia}</Text>
+                <ScrollViewClothes clothes={categoria.roupas}/>
               </View>
             ))
           }

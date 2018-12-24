@@ -36,5 +36,8 @@ export async function manipulate(
   actions: ImageManipulationOptions[] = [],
   saveOptions?: SaveOptions = {}
 ): Promise<ImageResult> {
+  if (!(typeof uri === 'string' || uri instanceof String)) {
+    throw new Error('Invalid type provided as uri parameter.');
+  }
   return ExponentImageManipulator.manipulate(uri, actions, saveOptions);
 }

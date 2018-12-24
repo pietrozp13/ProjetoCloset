@@ -20,7 +20,9 @@ jest.mock('../LogSerialization', () => ({
   }),
 }));
 
-jest.mock(`../../Constants`, () => require('../../__mocks__/Constants-development.js'));
+jest.mock('expo-constants', () => ({
+  Constants: require('../../__mocks__/Constants-development.js'),
+}));
 
 let originalFetch;
 

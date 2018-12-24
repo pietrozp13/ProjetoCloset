@@ -1,4 +1,4 @@
-import { EXPO_CONSOLE_METHOD_NAME } from '../LogSerialization';
+// import { EXPO_CONSOLE_METHOD_NAME } from '../LogSerialization';
 import RemoteConsole from '../RemoteConsole';
 import RemoteLogging from '../RemoteLogging';
 
@@ -31,18 +31,18 @@ it(`exposes un-overridden methods of the original console`, () => {
   expect(mockOriginalConsole.takeHeapSnapshot).toHaveBeenCalledTimes(1);
 });
 
-it(`uses a sentinel value to name custom console methods`, () => {
-  RemoteLogging.enqueueRemoteLogAsync.mockImplementationOnce(() => {
-    throw new Error('Intentional test error');
-  });
-  expect.assertions(1);
+// it(`uses a sentinel value to name custom console methods`, () => {
+//   RemoteLogging.enqueueRemoteLogAsync.mockImplementationOnce(() => {
+//     throw new Error('Intentional test error');
+//   });
+//   expect.assertions(1);
 
-  try {
-    console.log();
-  } catch (error) {
-    expect(error.stack).toMatch(EXPO_CONSOLE_METHOD_NAME);
-  }
-});
+//   try {
+//     console.log();
+//   } catch (error) {
+//     expect(error.stack).toMatch(EXPO_CONSOLE_METHOD_NAME);
+//   }
+// });
 
 describe(`asserting`, () => {
   it(`does nothing when the test condition passes`, () => {

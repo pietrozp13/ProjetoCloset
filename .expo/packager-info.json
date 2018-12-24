@@ -1,8 +1,9 @@
 {
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 2917,
+  "expoServerNgrokUrl": "https://8b-d2i.pietrozp13.projetocloset.exp.direct",
+  "packagerNgrokUrl": "https://packager.8b-d2i.pietrozp13.projetocloset.exp.direct",
+  "ngrokPid": 2936,
+  "devToolsPort": 19002
 }

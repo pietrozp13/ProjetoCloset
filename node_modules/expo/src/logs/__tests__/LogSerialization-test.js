@@ -1,9 +1,9 @@
 import React from 'react';
+import { Constants } from 'expo-constants';
 import symbolicateStackTrace from 'react-native/Libraries/Core/Devtools/symbolicateStackTrace';
 import TestRenderer from 'react-test-renderer';
 
 import LogSerialization from '../LogSerialization';
-import Constants from '../../Constants';
 
 jest.mock('react-native/Libraries/Core/Devtools/symbolicateStackTrace', () =>
   jest.fn(
@@ -13,10 +13,12 @@ jest.mock('react-native/Libraries/Core/Devtools/symbolicateStackTrace', () =>
   )
 );
 
-jest.mock(`../../Constants`, () => ({
-  manifest: {
-    developer: {
-      projectRoot: '/home/test/project',
+jest.mock('expo-constants', () => ({
+  Constants: {
+    manifest: {
+      developer: {
+        projectRoot: '/home/test/project',
+      },
     },
   },
 }));

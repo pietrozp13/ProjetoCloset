@@ -1,6 +1,5 @@
-import { NativeModules } from 'react-native';
-import Segment from '../Segment';
-
+import { Segment } from 'expo-analytics-segment';
+import { NativeModulesProxy } from 'expo-react-native-adapter';
 import { mockPlatformAndroid, mockPlatformIOS, unmockAllProperties } from '../../test/mocking';
 
 describe('initialization', () => {
@@ -16,10 +15,10 @@ describe('initialization', () => {
 
     Segment.initialize(mockOptions);
 
-    expect(NativeModules.ExponentSegment.initializeAndroid).toHaveBeenCalledWith(
+    expect(NativeModulesProxy.ExponentSegment.initializeAndroid).toHaveBeenCalledWith(
       mockOptions.androidWriteKey
     );
-    expect(NativeModules.ExponentSegment.initializeIOS).not.toHaveBeenCalled();
+    expect(NativeModulesProxy.ExponentSegment.initializeIOS).not.toHaveBeenCalled();
   });
 
   it(`initializes on iOS`, () => {
@@ -27,9 +26,9 @@ describe('initialization', () => {
 
     Segment.initialize(mockOptions);
 
-    expect(NativeModules.ExponentSegment.initializeIOS).toHaveBeenCalledWith(
+    expect(NativeModulesProxy.ExponentSegment.initializeIOS).toHaveBeenCalledWith(
       mockOptions.iosWriteKey
     );
-    expect(NativeModules.ExponentSegment.initializeAndroid).not.toHaveBeenCalled();
+    expect(NativeModulesProxy.ExponentSegment.initializeAndroid).not.toHaveBeenCalled();
   });
 });

@@ -3,7 +3,7 @@
  * Use it by importing and returning it from a `jest.mock` call explicitly.
  */
 
-const Constants = require.requireActual('../Constants').default;
+const Constants = require.requireActual('expo-constants').Constants;
 
 const MockConstants = Object.create(Constants);
 MockConstants.manifest = {

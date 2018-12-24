@@ -1,13 +1,13 @@
 // @flow
 
 import prettyFormat from 'pretty-format';
+import { Constants } from 'expo-constants';
 import parseErrorStack, {
   type StackFrame,
 } from 'react-native/Libraries/Core/Devtools/parseErrorStack';
 import symbolicateStackTrace from 'react-native/Libraries/Core/Devtools/symbolicateStackTrace';
 
 import { type LogData, type LogLevel } from './RemoteLogging';
-import Constants from '../Constants';
 
 type SerializedData = {
   body: Array<LogData>,

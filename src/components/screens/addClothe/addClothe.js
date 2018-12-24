@@ -1,8 +1,13 @@
 import React from 'react';
 import { Button, Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import t from 'tcomb-form-native';
-import { Query, Mutation } from 'react-apollo';
-import { POSTS_QUERY, POST_MUTATION2 } from '../addClothe/addClotheGraph'
+import { Mutation } from 'react-apollo';
+import { ALL_ROUPAS_QUERY, POST_MUTATION2 } from '../addClothe/addClotheGraph'
+import { mockBase } from "../../mock"
+import { ImagePicker } from 'expo';
+import * as firebase from 'firebase';
+import { graphql } from 'react-apollo';
+
 
 const Form = t.form.Form;
 
@@ -23,7 +28,7 @@ const valueForm = {
     cor: '',
 };
 
-export default class AddClothe extends React.Component {
+class AddClothe extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -52,12 +57,19 @@ export default class AddClothe extends React.Component {
     })
   }
 
-  handleSubmit = (createNroupa, photo) => {
+  async handleSubmit (createNroupa, photo) {
     let value = this.form.getValue();
-    let photoBase = photo.base64
-    createNroupa({ variables: {descricao: value.descricao, categoria: value.categotia, cor: value.cor, base64: photoBase}})
+    const response = await fetch(photo.uri);
+    const blob = await response.blob();
+    firebase.storage().ref().child('images/' + value.descricao).put(blob).then(function(snapshot) {
+      snapshot.ref.getDownloadURL().then(function(url) {
+        createNroupa({ variables: {descricao: value.descricao, categoria: value.categotia, cor: value.cor, imgUrl: url}})
+      });
+    }).catch(function(error) {
+      console.error('Upload failed:', error);
+    });
   }
-  
+
 
   mutationPost (photo) {
   var _ = require('lodash');
@@ -107,15 +119,19 @@ export default class AddClothe extends React.Component {
     this.setState({value: value})
     this.props.navigation.navigate('Camera', { txt: this.state.value })
   }
+
   
   render() {
-    let photo = this.props.navigation.getParam('img', 'null')
+    let photo = this.props.navigation.getParam('img', false)
     return (
       <View style={styles.container}>
         <View style={styles.containerImg}>
-          <TouchableOpacity style={styles.buttonClick} onPress={() => this.props.navigation.navigate('Camera', { testeFunc: this.setTeste.bind(this), teste: this.state.teste })}>
+          <TouchableOpacity 
+            style={styles.buttonClick}
+            onPress={() => this.props.navigation.navigate('Camera', { testeFunc: this.setTeste.bind(this), teste: this.state.teste })}
+          >
             {
-              photo.uri ?
+              photo ?
             <Image
                 style={{width: 280, height: 280 }}
                 source={{uri: photo.uri }}
@@ -134,6 +150,16 @@ export default class AddClothe extends React.Component {
     );
   }
 }
+
+export default graphql(POST_MUTATION2, {
+  options: {
+    update: (proxy, { data: { createNroupa } }) => {
+      const data = proxy.readQuery({ ALL_ROUPAS_QUERY });
+      data.nroupas.push(createNroupa);
+      proxy.writeQuery({ ALL_ROUPAS_QUERY, data });
+    },
+  },
+})(AddClothe);
 
 const styles = StyleSheet.create({
   container: {

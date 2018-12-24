@@ -11,6 +11,7 @@ export type AudioMode = {
   playsInSilentModeIOS: boolean,
   interruptionModeAndroid: boolean,
   shouldDuckAndroid: boolean,
+  playThroughEarpieceAndroid: boolean,
 };
 
 export const INTERRUPTION_MODE_IOS_MIX_WITH_OTHERS = 0;
@@ -59,6 +60,7 @@ export async function setAudioModeAsync(mode: AudioMode): Promise<void> {
     'playsInSilentModeIOS',
     'interruptionModeAndroid',
     'shouldDuckAndroid',
+    'playThroughEarpieceAndroid',
   ]);
   if (missingKeys.length > 0) {
     throw new Error(
@@ -85,10 +87,11 @@ export async function setAudioModeAsync(mode: AudioMode): Promise<void> {
   if (
     typeof mode.allowsRecordingIOS !== 'boolean' ||
     typeof mode.playsInSilentModeIOS !== 'boolean' ||
-    typeof mode.shouldDuckAndroid !== 'boolean'
+    typeof mode.shouldDuckAndroid !== 'boolean' ||
+    typeof mode.playThroughEarpieceAndroid !== 'boolean'
   ) {
     throw new Error(
-      '"allowsRecordingIOS", "playsInSilentModeIOS", and "shouldDuckAndroid" must be booleans.'
+      '"allowsRecordingIOS", "playsInSilentModeIOS", "playThroughEarpieceAndroid", and "shouldDuckAndroid" must be booleans.'
     );
   }
   return await NativeModules.ExponentAV.setAudioMode(mode);

@@ -7,13 +7,13 @@ export default class ScrollViewClothes extends Component {
          <View>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} >
                {
-                  this.props.clothes.map((item) => (
-                     <View key = {item.id} style = {styles.item}>
+                  this.props.clothes.map((item, index) => (
+                     <View key = {index} style = {styles.item}>
                         <Image
                             style={{width: 130, height: 130, borderRadius: 20, }}
-                            source={item.img}
+                            source={{uri: item.node.imgUrl}}
                         />
-                        <Text style={styles.text}>{item.name}</Text>
+                        <Text style={styles.text}>{item.node.descricao}</Text>
                      </View>
                   ))
                }

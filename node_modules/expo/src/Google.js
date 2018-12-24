@@ -1,8 +1,7 @@
 // @flow
 
+import { Constants } from 'expo-constants';
 import { NativeModules } from 'react-native';
-
-import Constants from './Constants';
 
 const Google = NativeModules.ExponentGoogle;
 

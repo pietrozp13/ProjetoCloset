@@ -15,13 +15,13 @@ it(`initializes React Native`, () => {
 });
 
 it(`passes if we're running in Expo`, () => {
-  const { NativeModules } = require('react-native');
-  expect(NativeModules.ExponentConstants).toBeDefined();
+  const { Constants } = require('expo-constants');
+  expect(Constants.expoVersion).toBeDefined();
   expect(() => require('../validate')).not.toThrow();
 });
 
 it(`throws if we're not running in Expo`, () => {
-  const { NativeModules } = require('react-native');
-  mockProperty(NativeModules, 'ExponentConstants', undefined);
+  const { Constants } = require('expo-constants');
+  mockProperty(Constants, 'expoVersion', undefined);
   expect(() => require('../validate')).toThrowError('Expo');
 });

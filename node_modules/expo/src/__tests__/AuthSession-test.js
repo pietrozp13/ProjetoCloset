@@ -1,6 +1,6 @@
 import { WebBrowser } from 'expo';
+import { Constants } from 'expo-constants';
 import AuthSession from '../AuthSession';
-import Constants from '../Constants';
 
 import { mockLinking, mockProperty, unmockAllProperties } from '../../test/mocking';
 

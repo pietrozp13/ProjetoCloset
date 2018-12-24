@@ -9,6 +9,9 @@ import { AppRegistry } from 'react-native';
 import { ApolloProvider, Query } from 'react-apollo';
 import ApolloClient from "apollo-boost";
 import MainScreen from "./src/components/screens/mainScreen/mainScreen"
+import { Constants, Camera, FileSystem, Permissions, BarCodeScanner } from 'expo';
+import * as firebase from 'firebase'
+import { ALL_ROUPAS_QUERY } from "./src/components/screens/mainScreen/mainScreenGraph"
 
 // const url = "http://0.0.0.0:4000/api"
 // const url = "https://frightful-spell-70294.herokuapp.com/api"
@@ -18,24 +21,57 @@ const client = new ApolloClient({
   uri: url
 });
 
-
 class HomeScreen extends React.Component {
   static navigationOptions = {
     title: 'Add Clothe',
   }
+  componentDidMount() {
+    var config = {
+      apiKey: "AIzaSyDEE12n24SCKYo9HbBTpH36BmZZc4_DHQU",
+      authDomain: "closetass.firebaseapp.com",
+      databaseURL: "https://closetass.firebaseio.com",
+      projectId: "closetass",
+      storageBucket: "closetass.appspot.com",
+      messagingSenderId: "448122332859"
+    }
+    firebase.initializeApp(config)
+  }
+
   render() {
+
     return (
       <ApolloProvider client={client}>
-        <MainScreen navigation={this.props.navigation}/>
+        <Query query={ALL_ROUPAS_QUERY}>
+            {({ loading, error, data, refetch }) => {
+              if (loading) return (<Text>Loading...</Text>);
+              if (error) return (<Text>`Error! ${error.message}`</Text>);
+              return (
+                <View>
+                   {console.log(this.props.data)}
+                  <Button
+                      title="Add Clothe"
+                      onPress={() => this.props.navigation.navigate('Settings', { data: data })}
+                    />
+                    <Button
+                      title="reload"
+                      onPress={()=> refetch()}
+                    />
+                  <MainScreen navigation={this.props.navigation} data={data}/>
+                </View>
+              )
+            }}
+        </Query>
       </ApolloProvider>
     );
   }
 }
 
-// <AddClothe navigation={this.props.navigation}/>
-
 class SettingsScreen extends React.Component {
+  
   render() {
+    const navigation = this.props.navigation;
+    let teste = navigation.getParam('data');
+    //console.log(teste)
     return (
       <ApolloProvider client={client}>
         <AddClothe navigation={this.props.navigation}/>
@@ -73,6 +109,13 @@ class HomeScreen2 extends React.Component {
 const HomeStack = createStackNavigator(
   {
     Home: HomeScreen,
+    Settings: { screen: SettingsScreen },
+    Camera: { 
+      screen: DetailsScreen,
+      navigationOptions: {
+        header: null,
+      },
+    },
   },
   {
     initialRouteName: 'Home',
@@ -100,9 +143,9 @@ const SettingsStack = createStackNavigator({
   },
 });
 
-SettingsStack.navigationOptions = ({ navigation }) => {
+HomeStack.navigationOptions = ({ navigation }) => {
   let tabBarVisible = true;
-  if (navigation.state.index > 0) {
+  if (navigation.state.index > 1) {
     tabBarVisible = false;
   }
   return {

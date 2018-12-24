@@ -1,4 +1,4 @@
-import Constants from '../Constants';
+import { Constants } from 'expo-constants';
 
 it(`defines a manifest`, () => {
   expect(Constants.manifest).toBeTruthy();
